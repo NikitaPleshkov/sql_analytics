@@ -1,5 +1,11 @@
+-- Problem:
 -- Find the maximum number of concurrent events per day
--- We have table with id event and time borders
+
+-- We have
+-- Table with id event and time borders
+
+-------------------------------------------------------------------
+-- DDL
 
 -- drop database sql_analytics;
 create database sql_analytics;
@@ -13,7 +19,7 @@ create table sql_test.event (
   begin_date timestamp,
   end_date timestamp
 );
-
+-------------------------------------------------------------------
 -- generate data
 insert into sql_test.event(event_id, begin_date, end_date)
 select row_number() over () as event_id, begin_date,
@@ -21,13 +27,14 @@ select row_number() over () as event_id, begin_date,
 from generate_series(now() - '3 day'::interval,
                       now(), '10 min') as begin_date;
 
-
--- Strategy:
--- Step 1. Select subset of events which have intersections
--- Step 2. Set begin and end point for subset (first and last event)
--- Step 3. Find interval which contains maximum count of events
---  -- Step 3.1 Find max(begin_date) and min(end_date)
---  -- Step 3.2 Sort max(begin_date) and min(end_date) as interval_start and interval_end
+-------------------------------------------------------------------
+-- Solution:
+-- -- Strategy:
+-- -- Step 1. Select subset of events which have intersections
+-- -- Step 2. Set begin and end point for subset (first and last event)
+-- -- Step 3. Find interval which contains maximum count of events
+--  -- -- Step 3.1 Find max(begin_date) and min(end_date)
+--  -- -- Step 3.2 Sort max(begin_date) and min(end_date) as interval_start and interval_end
 
 
 -- Calculate time intervals, which contains intersect of events
@@ -64,7 +71,7 @@ as result
 order by begin_date;
 
 
--- Step 4. Select interval which contains maximum count of event per day
+-- -- Step 4. Select interval which contains maximum count of event per day
 -- Calculate result
 select distinct day_id, max(cnt) over (partition by day_id)
 from (select count(1) as cnt, date_trunc('day', begin_date) as day_id, window_
