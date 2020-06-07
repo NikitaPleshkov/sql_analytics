@@ -78,6 +78,7 @@ return query(
                 when delta = '3 month' then concat(to_char(iter,'Q'), ' кв. ', to_char(iter,'YYYY'))
                 when delta = '1 year' then to_char(iter,'YYYY')
            end as time_line,
+	   -- If you need, you can include some logic functional here									       
 	   iter::date,
            iter_end::date
     from recur
