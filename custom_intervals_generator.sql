@@ -11,6 +11,10 @@
 -- -- -- If the difference between start and end > 540 and <= 2160 - dimension is year
 -- -- -- We need to have ability for using custom label
 
+-- Solution:
+-- -- Solution based on postgresql function with dialect plpgsql
+-- -- But if we need, we can adaptive this solution to another DB with minimal fix
+
 -- drop function sql_test.intervals_generator(date, date);
 create or replace function sql_test.intervals_generator(date_begin date default (now() - '6 year'::interval + '1 day'::interval)::date,
 	                                                      date_end date default ('now'::text)::date)
@@ -83,3 +87,5 @@ end
 $$
 ;
 select * from sql_test.intervals_generator('2013-12-31', '2013-12-01');
+-- Next steps:
+-- -- We can to use generate_series or another function 
