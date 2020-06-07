@@ -1,3 +1,4 @@
+language sql;
 -- Problem:
 -- Find the maximum number of concurrent events per day
 
